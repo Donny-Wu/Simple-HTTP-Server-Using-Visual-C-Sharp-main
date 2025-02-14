@@ -17,6 +17,8 @@ namespace SimpleHTTPServer
     {
 
         private Socket httpServer;
+        //private string serverIP;
+        private System.Net.IPAddress serverIP;
         private int serverPort = 80;
         private Thread thread;
 
@@ -36,8 +38,11 @@ namespace SimpleHTTPServer
                 try
                 {
                     serverPort = int.Parse(serverPortText.Text.ToString());
-
-                    if(serverPort > 65535 || serverPort <= 0)
+                    //System.Net.IPAddress ipaddress = System.Net.IPAddress.Parse("127.0.0.1");
+                    //serverIP   = serverIPText.ToString();
+                    serverIP   = System.Net.IPAddress.Parse(serverIPText.Text.ToString().Trim());
+                    Console.WriteLine("serverIP : "+ serverIP);
+                    if (serverPort > 65535 || serverPort <= 0)
                     {
                        throw new Exception("Server Port not within the range");
                     }
@@ -94,7 +99,9 @@ namespace SimpleHTTPServer
         {
             try
             {
-                IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, serverPort);
+                
+                //IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, serverPort);
+                IPEndPoint endpoint = new IPEndPoint(serverIP, serverPort);
                 httpServer.Bind(endpoint);
                 httpServer.Listen(1);
                 startListeningForConnection();
@@ -155,6 +162,11 @@ namespace SimpleHTTPServer
 
                 client.Close();
             }
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
